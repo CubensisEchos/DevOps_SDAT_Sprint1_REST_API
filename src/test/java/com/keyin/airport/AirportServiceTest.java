@@ -102,7 +102,7 @@ public class AirportServiceTest
     }
 
     @Test
-    public void updatedAirport_AirportNotFound()
+    public void updateAirport_AirportNotFound()
     {
         Airport updatedAirport = new Airport("Test updated airport", "Test updated code", city);
         Mockito.when(airportRepository.findById(1L)).thenReturn(java.util.Optional.empty());

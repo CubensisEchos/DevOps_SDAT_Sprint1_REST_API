@@ -50,7 +50,7 @@ public class AirportControllerTest
     {
         List<Airport> airports = List.of(
                 new Airport("Test airport", "Test code", city),
-                new Airport("Test airport", "Test code", city)
+                new Airport("Test airport2", "Test code2", city)
         );
 
         when(airportService.getAllAirports()).thenReturn(airports);

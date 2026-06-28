@@ -4,6 +4,7 @@ import com.keyin.airport.Airport;
 import com.keyin.passenger.Passenger;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,10 +17,10 @@ public class City {
     private int population;
 
     @OneToMany(mappedBy = "city")
-    private List<Airport> airports;
+    private List<Airport> airports = new ArrayList<>();
 
-    @OneToMany
-    private List<Passenger> passengers;
+    @OneToMany(mappedBy = "city")
+    private List<Passenger> passengers = new ArrayList<>();;
 
     public City()
     {

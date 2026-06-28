@@ -95,7 +95,7 @@ public class CityServiceTest
     }
 
     @Test
-    public void updatedCity_CityNotFound()
+    public void updateCity_CityNotFound()
     {
         City updatedCity = new City("Test updated city", "Test updated state", 102030);
         Mockito.when(cityRepository.findById(1L)).thenReturn(java.util.Optional.empty());
