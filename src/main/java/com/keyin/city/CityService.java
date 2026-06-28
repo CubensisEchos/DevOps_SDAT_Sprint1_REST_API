@@ -16,6 +16,11 @@ public class CityService
         return cityRepository.save(city);
     }
 
+    public List<City> getAllCities()
+    {
+        return cityRepository.findAll();
+    }
+
     public java.util.Optional<City> getCityById(Long id)
     {
         return cityRepository.findById(id);
@@ -33,7 +38,7 @@ public class CityService
                 });
     }
 
-    public boolean deleteCity(Long id)
+    public boolean deleteCityById(Long id)
     {
         if (cityRepository.existsById(id))
         {
@@ -41,20 +46,6 @@ public class CityService
             return true;
         }
         return false;
-    }
-
-    //seed cities for a base of cities in system
-    public List<City> seedCities()
-    {
-        List<City> cities = List.of(
-                new City("Los Angeles", "California", 3860000),
-                new City("Miami", "Florida", 487000),
-                new City("San Antonio", "Texas", 1570000),
-                new City("New York City", "New York", 8478000),
-                new City("Phoenix", "Arizona", 1673000),
-                new City("Chicago", "Illinois", 2721000)
-        );
-        return cityRepository.saveAll(cities);
     }
 
     //add airport to city
