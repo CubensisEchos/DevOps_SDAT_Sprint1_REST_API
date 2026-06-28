@@ -1,6 +1,10 @@
 package com.keyin.city;
 
+import com.keyin.airport.Airport;
+import com.keyin.passenger.Passenger;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class City {
@@ -11,11 +15,11 @@ public class City {
     private String state;
     private int population;
 
-    @OneToMany
+    @OneToMany(mappedBy = "city")
     private List<Airport> airports;
 
     @OneToMany
-    private List<Citizen> citizens;
+    private List<Passenger> passengers;
 
     public City()
     {
@@ -27,6 +31,15 @@ public class City {
         this.name = name;
         this.state = state;
         this.population = population;
+    }
+
+    public City(Long id, String name, String state, int population, List<Airport> airports, List<Passenger> passengers) {
+        this.id = id;
+        this.name = name;
+        this.state = state;
+        this.population = population;
+        this.airports = airports;
+        this.passengers = passengers;
     }
 
     public Long getId()
@@ -79,13 +92,13 @@ public class City {
         this.airports = airports;
     }
 
-    public List<Citizen> getCitizens()
+    public List<Passenger> getPassengers()
     {
-        return citizens;
+        return passengers;
     }
 
-    public void setCitizens(List<Citizen> citizens)
+    public void setCitizens(List<Passenger> passengers)
     {
-        this.citizens = citizens;
+        this.passengers = passengers;
     }
 }

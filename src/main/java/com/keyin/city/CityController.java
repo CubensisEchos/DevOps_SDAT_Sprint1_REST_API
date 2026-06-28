@@ -14,13 +14,19 @@ public class CityController
     @Autowired
     private CityService cityService;
 
-    @PostMapping("/city")
+    @PostMapping("/cities")
     public City createCity(@RequestBody City city)
     {
         return cityService.createCity(city);
     }
 
-    @GetMapping("/city/{id}")
+   @GetMapping("/cities")
+   public ResponseEntity<List<City>> getAllCities()
+   {
+       return ResponseEntity.ok(cityService.getAllCities());
+   }
+
+    @GetMapping("/cities/{id}")
     public ResponseEntity<City> getCityById(@PathVariable Long id)
     {
         return cityService.getCityById(id)
@@ -28,7 +34,7 @@ public class CityController
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/city/{id}")
+    @PutMapping("/cities/{id}")
     public ResponseEntity<City> updateCity(@PathVariable Long id, @RequestBody City city)
     {
         return cityService.updateCity(id, city)
@@ -36,20 +42,14 @@ public class CityController
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/cities/{id}")
     public ResponseEntity<Void> deleteCity(@PathVariable Long id)
     {
-        boolean deleted = cityService.deleteCity(id);
+        boolean deleted = cityService.deleteCityById(id);
         if (deleted)
         {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/seed")
-    public ResponseEntity<List<City>> seedCities()
-    {
-        return new ResponseEntity<>(cityService.seedCities(), HttpStatus.OK);
     }
 }
