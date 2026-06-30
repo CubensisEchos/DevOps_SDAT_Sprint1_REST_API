@@ -20,7 +20,7 @@ public class City {
     private List<Airport> airports = new ArrayList<>();
 
     @OneToMany(mappedBy = "city")
-    private List<Passenger> passengers = new ArrayList<>();;
+    private List<Passenger> passengers = new ArrayList<>();
 
     public City()
     {
@@ -98,7 +98,7 @@ public class City {
         return passengers;
     }
 
-    public void setCitizens(List<Passenger> passengers)
+    public void setPassengers(List<Passenger> passengers)
     {
         this.passengers = passengers;
     }

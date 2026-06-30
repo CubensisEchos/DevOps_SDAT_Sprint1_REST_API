@@ -18,10 +18,11 @@ public class Passenger
     private String phoneNumber;
 
     @ManyToOne
+    @JoinColumn(name = "city_id")
     private City city;
 
     @ManyToMany(mappedBy = "passengers")
-    private List<Aircraft> aircrafts = new ArrayList<>();
+    private List<Aircraft> aircraftList = new ArrayList<>();
 
     public Passenger()
     {
@@ -85,5 +86,13 @@ public class Passenger
     public void setCity(City city)
     {
         this.city = city;
+    }
+
+    public List<Aircraft> getAircraftList() {
+        return aircraftList;
+    }
+
+    public void setAircraftList(List<Aircraft> aircraftList) {
+        this.aircraftList = aircraftList;
     }
 }
