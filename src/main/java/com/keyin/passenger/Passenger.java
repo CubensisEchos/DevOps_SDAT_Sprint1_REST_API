@@ -1,5 +1,6 @@
 package com.keyin.passenger;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.keyin.aircraft.Aircraft;
 import com.keyin.city.City;
 import jakarta.persistence.*;
@@ -19,9 +20,11 @@ public class Passenger
 
     @ManyToOne
     @JoinColumn(name = "city_id")
+    @JsonBackReference
     private City city;
 
     @ManyToMany(mappedBy = "passengers")
+    @JsonBackReference("passengers-aircraft")
     private List<Aircraft> aircraftList = new ArrayList<>();
 
     public Passenger()

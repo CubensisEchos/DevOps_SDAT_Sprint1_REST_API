@@ -51,4 +51,12 @@ public class PassengerController
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/cities/{cityId}/passengers")
+    public ResponseEntity<Passenger> addPassengerToCity(@PathVariable Long cityId, @RequestBody Passenger passenger)
+    {
+        return passengerService.addPassengerToCity(cityId, passenger)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

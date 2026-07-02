@@ -52,5 +52,12 @@ public class AirportController
         return ResponseEntity.notFound().build();
     }
 
-    //add seed controller
+    @PostMapping("/cities/{cityId}/airports")
+    public ResponseEntity<Airport> addAirportToCity(@PathVariable Long cityId, @RequestBody Airport airport)
+    {
+        return airportService.addAirportToCity(cityId, airport)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }

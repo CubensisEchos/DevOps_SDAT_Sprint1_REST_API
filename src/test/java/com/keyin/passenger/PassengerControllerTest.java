@@ -2,6 +2,7 @@ package com.keyin.passenger;
 
 import com.keyin.airport.Airport;
 import com.keyin.city.City;
+import com.keyin.city.CityRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -143,5 +144,42 @@ public class PassengerControllerTest
         Assertions.assertEquals(80L, response.getId());
         Assertions.assertEquals("Test first name", response.getFirstName());
         verify(passengerService).createPassenger(any(Passenger.class));
+    }
+
+    @Test
+    public void addPassengerToCity_ReturnsOkWhenSaved()
+    {
+        Long cityId = 1L;
+
+        Passenger passenger = new Passenger();
+        passenger.setFirstName("John");
+        passenger.setLastName("Smith");
+        passenger.setPhoneNumber("555-1234");
+        passenger.setCity(city);
+
+        Mockito.when(passengerService.addPassengerToCity(Mockito.eq(cityId), Mockito.any(Passenger.class)))
+                .thenReturn(Optional.of(passenger));
+
+        ResponseEntity<Passenger> response = passengerController.addPassengerToCity(cityId, passenger);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals("John", response.getBody().getFirstName());
+        Assertions.assertEquals("Smith", response.getBody().getLastName());
+        verify(passengerService).addPassengerToCity(eq(cityId), any(Passenger.class));
+    }
+
+    @Test
+    public void addPassengerToCity_ReturnsNotFoundWhenMissing()
+    {
+        Long cityId = 80L;
+
+        Mockito.when(passengerService.addPassengerToCity(eq(cityId), any(Passenger.class)))
+                .thenReturn(Optional.empty());
+
+        ResponseEntity<Passenger> response = passengerController.addPassengerToCity(cityId, new Passenger());
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(passengerService).addPassengerToCity(eq(cityId), any(Passenger.class));
     }
 }

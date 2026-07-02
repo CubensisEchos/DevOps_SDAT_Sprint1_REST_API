@@ -1,5 +1,7 @@
 package com.keyin.aircraft;
 
+import com.keyin.airport.Airport;
+import com.keyin.passenger.Passenger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +19,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AircraftControllerTest
@@ -28,18 +29,6 @@ public class AircraftControllerTest
 
     @InjectMocks
     private AircraftController aircraftController;
-
-    @BeforeEach
-    void setup()
-    {
-
-    }
-
-    @AfterEach
-    void tearDown()
-    {
-
-    }
 
     @Test
     public void getAllAircraft_ReturnsOkWhenFound()
@@ -141,5 +130,75 @@ public class AircraftControllerTest
         Assertions.assertEquals(80L, response.getId());
         Assertions.assertEquals("Test type", response.getType());
         verify(aircraftService).saveNewAircraft(any(Aircraft.class));
+    }
+
+    @Test
+    public void addPassengerToAircraft_ReturnsOkWhenAdded()
+    {
+        Long aircraftId = 1L;
+        Long passengerId = 2L;
+
+        Passenger passenger = new Passenger();
+        passenger.setId(passengerId);
+        passenger.setFirstName("John");
+        passenger.setLastName("Smith");
+
+        Aircraft aircraft = new Aircraft();
+        aircraft.setId(aircraftId);
+
+        Mockito.when(aircraftService.addPassengerToAircraft(eq(aircraftId), eq(passengerId))).thenReturn(Optional.of(aircraft));
+        ResponseEntity<Aircraft> response = aircraftController.addPassengerToAircraft(aircraftId, passengerId);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(aircraftId, response.getBody().getId());
+        verify(aircraftService).addPassengerToAircraft(eq(aircraftId), eq(passengerId));
+    }
+
+    @Test
+    public void addPassengerToAircraft_ReturnsNotFoundWhenMissing()
+    {
+        Long aircraftId = 1L;
+        Long passengerId = 60L;
+
+        Mockito.when(aircraftService.addPassengerToAircraft(eq(aircraftId), eq(passengerId))).thenReturn(Optional.empty());
+        ResponseEntity<Aircraft> response = aircraftController.addPassengerToAircraft(aircraftId, passengerId);
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(aircraftService).addPassengerToAircraft(eq(aircraftId), eq(passengerId));
+    }
+
+    @Test
+    public void addAirportToAircraft_ReturnsOkWhenAdded()
+    {
+        Long aircraftId = 1L;
+        Long airportId = 5L;
+
+        Airport airport = new Airport();
+        airport.setId(airportId);
+        airport.setName("Test Airport");
+
+        Aircraft aircraft = new Aircraft();
+        aircraft.setId(aircraftId);
+
+        Mockito.when(aircraftService.addAirportToAircraft(eq(aircraftId), eq(airportId))).thenReturn(Optional.of(aircraft));
+        ResponseEntity<Aircraft> response = aircraftController.addAirportToAircraft(aircraftId, airportId);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(aircraftId, response.getBody().getId());
+        verify(aircraftService).addAirportToAircraft(eq(aircraftId), eq(airportId));
+    }
+    @Test
+    public void addAirportToAircraft_ReturnsNotFoundWhenMissing()
+    {
+        Long aircraftId = 1L;
+        Long airportId = 99L;
+
+        Mockito.when(aircraftService.addAirportToAircraft(eq(aircraftId), eq(airportId))).thenReturn(Optional.empty());
+        ResponseEntity<Aircraft> response = aircraftController.addAirportToAircraft(aircraftId, airportId);
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(aircraftService).addAirportToAircraft(eq(aircraftId), eq(airportId));
     }
 }

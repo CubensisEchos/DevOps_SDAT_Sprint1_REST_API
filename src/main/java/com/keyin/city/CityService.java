@@ -47,9 +47,4 @@ public class CityService
         }
         return false;
     }
-
-    //add airport to city
-
-    //add citizen to city?
-
 }

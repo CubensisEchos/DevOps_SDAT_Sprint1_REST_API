@@ -1,5 +1,7 @@
 package com.keyin.airport;
 
+import com.keyin.city.City;
+import com.keyin.city.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +11,10 @@ import java.util.List;
 public class AirportService
 {
     @Autowired
-    private  AirportRepository airportRepository;
+    private AirportRepository airportRepository;
+
+    @Autowired
+    private CityRepository cityRepository;
 
     public Airport createAirport(Airport airport)
     {
@@ -47,7 +52,14 @@ public class AirportService
         return false;
     }
 
-    //add cities?
 
-    //add aircafts?
+    public java.util.Optional<Airport> addAirportToCity(Long cityId, Airport airport)
+    {
+        return cityRepository.findById(cityId)
+                .map(city ->
+                {
+                    airport.setCity(city);
+                    return airportRepository.save(airport);
+                });
+    }
 }
