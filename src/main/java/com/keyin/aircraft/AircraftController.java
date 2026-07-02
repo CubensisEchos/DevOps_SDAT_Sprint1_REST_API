@@ -50,4 +50,20 @@ public class AircraftController
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/aircraft/{aircraftId}/airports/{airportId}")
+    public ResponseEntity<Aircraft> addAirportToAircraft(@PathVariable Long aircraftId, @PathVariable Long airportId)
+    {
+        return aircraftService.addAirportToAircraft(aircraftId, airportId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/aircraft/{aircraftId}/passengers/{passengerId}")
+    public ResponseEntity<Aircraft> addPassengerToAircraft(@PathVariable Long aircraftId, @PathVariable Long passengerId)
+    {
+        return aircraftService.addPassengerToAircraft(aircraftId, passengerId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

@@ -1,6 +1,7 @@
 package com.keyin.airport;
 
 import com.keyin.city.City;
+import com.keyin.city.CityRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,9 @@ public class AirportServiceTest
 {
     @Mock
     private AirportRepository airportRepository;
+
+    @Mock
+    private CityRepository cityRepository;
 
     @InjectMocks
     private AirportService airportService;
@@ -138,6 +142,22 @@ public class AirportServiceTest
         Airport savedAirport = airportService.createAirport(airport);
 
         Assertions.assertEquals(airport, savedAirport);
+        Mockito.verify(airportRepository).save(airport);
+    }
+
+    @Test
+    public void addAirportToCity_ReturnsAirportAndCity()
+    {
+        Long cityId = 1L;
+
+        Mockito.when(cityRepository.findById(cityId)).thenReturn(Optional.of(city));
+        Mockito.when(airportRepository.save(Mockito.any(Airport.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Optional<Airport> expected = airportService.addAirportToCity(cityId, airport);
+
+        Assertions.assertTrue(expected.isPresent());
+        Assertions.assertEquals(city, expected.get().getCity());
+        Mockito.verify(cityRepository).findById(cityId);
         Mockito.verify(airportRepository).save(airport);
     }
 }

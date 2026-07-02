@@ -142,4 +142,41 @@ public class AirportControllerTest
         Assertions.assertEquals(30L, response.getId());
         verify(airportService).createAirport(any(Airport.class));
     }
+
+    @Test
+    public void addAirportToCity_ReturnsOkWhenSaved()
+    {
+        Long cityId = 1L;
+
+        Airport airport = new Airport();
+        airport.setId(50L);
+        airport.setName("Test airport");
+        airport.setAirportCode("Test code");
+        airport.setCity(city);
+
+        Mockito.when(airportService.addAirportToCity(Mockito.eq(cityId), Mockito.any(Airport.class)))
+                .thenReturn(Optional.of(airport));
+
+        ResponseEntity<Airport> response = airportController.addAirportToCity(cityId, airport);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(50L, response.getBody().getId());
+        Assertions.assertEquals("Test airport", response.getBody().getName());
+        verify(airportService).addAirportToCity(eq(cityId), any(Airport.class));
+    }
+
+    @Test
+    public void addAirportToCity_ReturnsNotFoundWhenMissing()
+    {
+        Long cityId = 80L;
+
+        Mockito.when(airportService.addAirportToCity(eq(cityId), any(Airport.class)))
+                .thenReturn(Optional.empty());
+
+        ResponseEntity<Airport> response = airportController.addAirportToCity(cityId, new Airport());
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(airportService).addAirportToCity(eq(cityId), any(Airport.class));
+    }
 }

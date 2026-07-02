@@ -1,5 +1,7 @@
 package com.keyin.passenger;
 
+import com.keyin.city.City;
+import com.keyin.city.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,9 @@ public class PassengerService
 {
     @Autowired
     private PassengerRepository passengerRepository;
+
+    @Autowired
+    private CityRepository cityRepository;
 
     public Passenger createPassenger(Passenger passenger)
     {
@@ -48,7 +53,14 @@ public class PassengerService
         return false;
     }
 
-    //connect to aircraft
+    public java.util.Optional<Passenger> addPassengerToCity(Long cityId, Passenger passenger)
+    {
+        return cityRepository.findById(cityId)
+                .map(city ->
+                {
+                    passenger.setCity(city);
+                    return passengerRepository.save(passenger);
+                });
+    }
 
-    //connect to city
 }

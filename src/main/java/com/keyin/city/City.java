@@ -1,5 +1,6 @@
 package com.keyin.city;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.keyin.airport.Airport;
 import com.keyin.passenger.Passenger;
 import jakarta.persistence.*;
@@ -17,9 +18,11 @@ public class City {
     private int population;
 
     @OneToMany(mappedBy = "city")
+    @JsonManagedReference
     private List<Airport> airports = new ArrayList<>();
 
     @OneToMany(mappedBy = "city")
+    @JsonManagedReference
     private List<Passenger> passengers = new ArrayList<>();
 
     public City()

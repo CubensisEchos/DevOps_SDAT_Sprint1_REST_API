@@ -2,6 +2,7 @@ package com.keyin.passenger;
 
 import com.keyin.airport.Airport;
 import com.keyin.city.City;
+import com.keyin.city.CityRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,9 @@ public class PassengerServiceTest
 {
     @Mock
     private PassengerRepository passengerRepository;
+
+    @Mock
+    private CityRepository cityRepository;
 
     @InjectMocks
     private PassengerService passengerService;
@@ -142,6 +146,23 @@ public class PassengerServiceTest
         Passenger savedPassenger = passengerService.createPassenger(passenger);
 
         Assertions.assertEquals(passenger, savedPassenger);
+        Mockito.verify(passengerRepository).save(passenger);
+    }
+
+    @Test
+    public void addPassengerToCity_ReturnsPassengerAndCity()
+    {
+        Long cityId = 1L;
+
+        Mockito.when(cityRepository.findById(cityId)).thenReturn(Optional.of(city));
+        Mockito.when(passengerRepository.save(Mockito.any(Passenger.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Optional<Passenger> expected = passengerService.addPassengerToCity(cityId, passenger);
+
+
+        Assertions.assertTrue(expected.isPresent());
+        Assertions.assertEquals(city, expected.get().getCity());
+        Mockito.verify(cityRepository).findById(cityId);
         Mockito.verify(passengerRepository).save(passenger);
     }
 
